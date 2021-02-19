@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Android SDK</string>
+
+    <string name="button_text">Cycle</string>
+    <string name="textView_lastUpdate">Last Update:</string>
+    <string name="textView_updateText">Not Updated</string>
+    <string name="textView_SDK">SDK</string>
+    <string name="textView_version">Version</string>
+    <string name="button_initSDK">Init SDK</string>
+    <string name="button_intelligence">Intel</string>
+    <string name="text_notInitialized">Not Initialized</string>
+    <string name="text_loggedInUserText">Logged In User</string>
+    <string name="text_loggedInUserInitial">Not Logged In</string>
+    <string name="text_apiVersionLabel">API Version</string>
+    <string name="text_apiVersionText">API Version</string>
+    <string name="text_customSettingLabel">Custom Settings</string>
+    <string name="text_osVersionLabel">OS Version</string>
+    <string name="text_appBuildVersionLabel">Build Version</string>
+    <string name="text_appConfigLabelString">App Config</string>
+    <string name="text_appConfigString">App Config Value</string>
+
+
+    <string name="resource_configDescription">String Config Example Description</string>
+    <string name="resource_configTitle">String Config</string>
+
+    <string name="restriction_appConfigLabelString">App Config String</string>
+    <string name="restriction_appConfigString">App Config Value</string>
+    <string name="restriction_crittercismKey">Crittercism Key</string>
+    <string name="restriction_crittercismDescripton">Crittercism Key</string>
+
+
+</resources>

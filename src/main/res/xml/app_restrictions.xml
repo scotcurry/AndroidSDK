@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <restriction
+        android:key="appConfigKeyString"
+        android:title="@string/resource_configTitle"
+        android:restrictionType="string"
+        android:description="@string/resource_configDescription"
+        android:defaultValue="Default Value" />
+
+    <restriction
+        android:key="crittercismKey"
+        android:title="@string/restriction_crittercismKey"
+        android:restrictionType="string"
+        android:description="@string/restriction_crittercismDescripton"
+        android:defaultValue="NA" />
+
+</restrictions>
