@@ -1,6 +1,5 @@
 package org.curryware.androidsdk
 
-import android.Manifest
 import android.content.Context
 import android.content.RestrictionsManager
 import android.os.Build
@@ -9,10 +8,17 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.airwatch.sdk.SDKManager
 import com.crittercism.app.Crittercism
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl
+import org.curryware.androidsdk.repository.Repository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.concurrent.thread
@@ -21,7 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     private val logTag: String = "MainActivity"
     private lateinit var sdkInfoModel: SdkViewModel
+    private lateinit var mainViewModel: MainViewModel
     private var sdkManager: SDKManager? = null
+    private var crittercismKeyConst = "c6751b9d5ea5431ea0515f3a403add2200555300"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +67,14 @@ class MainActivity : AppCompatActivity() {
             textViewCustomSettings.text = it.toString()
         })
 
+        val appConfigCrittersismKey = getAppConfigInfo()
+        appConfigCrittersismKey?.let {
+            Crittercism.initialize(this, appConfigCrittersismKey)
+        } ?: run {
+            Crittercism.initialize(this, crittercismKeyConst)
+        }
+        Crittercism.initialize(this, crittercismKeyConst)
+
         initSDKButton.setOnClickListener {
             val returnString = getAppConfigInfo()
             textViewAppConfig.text = returnString
@@ -71,6 +87,23 @@ class MainActivity : AppCompatActivity() {
             intelligenceCode()
             Log.i(logTag, "Clicked Intelligence Button")
         }
+
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.getPost()
+        viewModel.restResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                val httpURL = HttpUrl.Builder()
+                        .scheme("https")
+                        .host("www.curryware.org")
+                        .build()
+                val url = httpURL.url()
+                Crittercism.logNetworkRequest("GET", url, 5550, 345123, 989, 200, null)
+                Log.i(logTag, response.body()?.title!!)
+            }
+        })
+
     }
 
 
@@ -82,6 +115,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startSDK() { thread {
 
+        Crittercism.leaveBreadcrumb("Trying to initialize SDK")
         val currentDate = LocalDateTime.now()
         val dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
         val dateString = currentDate.format(dateTimeFormatter)
@@ -92,9 +126,24 @@ class MainActivity : AppCompatActivity() {
             val initSDKManager = SDKManager.init(this)
             sdkManager = initSDKManager
 
+            val appConfig: Map<String?, String?> = sdkManager?.applicationConfigSetting as Map<String?, String?>
+            val appConfigKeys = appConfig.keys
+            for (currentKey in appConfigKeys) {
+                currentKey?.let {
+                    val currentValue = appConfig[currentKey]
+                    Log.i(logTag, "CurrentKey: $currentKey = Value: $currentValue")
+                }
+            }
+
+            val profileJSONString = sdkManager?.sdkProfileJSONString
+            Log.i(logTag, "Profile JSON: $profileJSONString")
+
             sdkInfoModel.loggedInUser.postValue(sdkManager?.enrollmentUsername)
             sdkInfoModel.apiVersion.postValue(sdkManager?.apiVersion)
             sdkInfoModel.customSettings.postValue(sdkManager?.customSettings)
+            sdkManager.let {
+                Log.i(logTag, "Custom Settigs: " + sdkManager?.customSettings)
+            }
             Log.i(logTag, "SDK Initialized Correctly")
         } catch (exception: Exception) {
             sdkManager = null
@@ -102,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                 val exceptionThrown = exception.message!!
                 val exceptionMessage = "SDK Error: $exceptionThrown"
                 Log.e(logTag, exceptionMessage, exception)
+                Crittercism.logHandledException(exception)
             }
         }
     } }
@@ -113,8 +163,9 @@ class MainActivity : AppCompatActivity() {
         return androidVersionNumber
     }
 
-    private fun getAppConfigInfo(): String? {
+    private fun getAppConfigInfo(): String {
 
+        Crittercism.leaveBreadcrumb("Getting App Config Info")
         val appConfigStringConst = "appConfigKeyString"
         val crittercismKeyConst = "crittercismKey"
 
@@ -131,6 +182,6 @@ class MainActivity : AppCompatActivity() {
         val crittercismValue = crittercismKey?: "NA"
         configValues.put(crittercismKeyConst, crittercismValue)
         Log.i(logTag, "Crittercism Key: $crittercismValue")
-        return configString
+        return crittercismValue
     }
 }
