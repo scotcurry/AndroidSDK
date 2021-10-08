@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.curryware.androidsdk">
+
+    <!-- Following declarations are added -->
+    <uses-permission android:name="com.airwatch.sdk.BROADCAST" />
+
+    <!-- Following tag applies to compileSdkVersion 30 or later. -->
+    <queries>
+        <intent>
+            <action android:name="com.airwatch.p2p.intent.action.PULL_DATA" />
+        </intent>
+    </queries>
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AndroidSDK">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AndroidSDK.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.airwatch.sdk.AirWatchSDKBroadcastReceiver"
+            android:permission="com.airwatch.sdk.BROADCAST" >
+            <intent-filter>
+                <!--
+                Next line uses the initial dot notation as a shorthand for the package name.
+                -->
+                <action android:name=".airwatchsdk.BROADCAST" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="com.airwatch.intent.action.APPLICATION_CONFIGURATION_CHANGED"
+                    />
+                <!--
+                In the host attribute, replace com.your.package with the package name of your
+                application.
+                -->
+                <data android:scheme="app" android:host="org.curryware.androidsdk" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".AirWatchSDKIntentService"/>
+
+    </application>
+
+</manifest>
