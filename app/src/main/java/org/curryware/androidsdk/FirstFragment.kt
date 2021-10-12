@@ -46,10 +46,8 @@ class FirstFragment : Fragment() {
         val gson = Gson()
         val jsonString = gson.toJson(SDKParameters("name1", "value1"))
         Log.i(logTag, "JSON String: $jsonString")
-        if (view != null) {
-            textView = view.findViewById(R.id.textview_first)
-            textView.text = "Hello Scot"
-        }
+        textView = view.findViewById(R.id.textview_first)
+
         startSDK()
     }
 

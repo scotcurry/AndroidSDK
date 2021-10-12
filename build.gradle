@@ -3,9 +3,12 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = 'https://vmwaresaas.jfrog.io/artifactory/Workspace-ONE-Android-SDK/'
+        }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.2"
+        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
 
         // NOTE: Do not place your application dependencies here; they belong
