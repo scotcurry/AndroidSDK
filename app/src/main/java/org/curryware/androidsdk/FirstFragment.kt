@@ -11,9 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.airwatch.sdk.SDKManager
 import org.curryware.androidsdk.databinding.FragmentFirstBinding
 import kotlin.concurrent.thread
-import com.google.gson.Gson
-
-import org.curryware.androidsdk.dataclasses.SDKParameters
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -23,7 +20,8 @@ class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private var sdkManager: SDKManager? = null
     private val logTag: String = "FirstFragment"
-    private lateinit var textView: TextView
+    private lateinit var textViewIsEnrolled: TextView
+    private lateinit var textViewEnrolledUser: TextView
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -43,10 +41,8 @@ class FirstFragment : Fragment() {
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
-        val gson = Gson()
-        val jsonString = gson.toJson(SDKParameters("name1", "value1"))
-        Log.i(logTag, "JSON String: $jsonString")
-        textView = view.findViewById(R.id.textview_first)
+        textViewIsEnrolled = view.findViewById(R.id.is_enrolled)
+        textViewEnrolledUser = view.findViewById(R.id.enrolled_user)
 
         startSDK()
     }
@@ -63,8 +59,12 @@ class FirstFragment : Fragment() {
             Log.i(logTag, "!!! SDK Manager Initialized !!!")
             if (sdkManager != null) {
                 val enrolled = sdkManager!!.isEnrolled
+                textViewIsEnrolled.text = "Is Enrolled: $enrolled"
+                val enrolledUser = sdkManager!!.enrollmentUsername
+                textViewEnrolledUser.text = "Enrolled User: $enrolledUser"
+
                 Log.i(logTag, "Is Enrolled: $enrolled")
-                textView.text = "Is Enrolled: $enrolled"
+                Log.i(logTag, "Enrolled User: $enrolledUser")
             }
         }
         catch (exception: Exception) {
