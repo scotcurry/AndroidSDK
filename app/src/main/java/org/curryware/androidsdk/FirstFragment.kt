@@ -62,7 +62,7 @@ class FirstFragment : Fragment() {
             sdkManager = initSDKManager
             Log.i(logTag, "!!! SDK Manager Initialized !!!")
             if (sdkManager != null) {
-                val enrolled = sdkManager?.isEnrolled
+                val enrolled = sdkManager!!.isEnrolled
                 Log.i(logTag, "Is Enrolled: $enrolled")
                 textView.text = "Is Enrolled: $enrolled"
             }

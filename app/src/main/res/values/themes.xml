@@ -20,6 +20,5 @@
     </style>
 
     <style name="Theme.AndroidSDK.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="Theme.AndroidSDK.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

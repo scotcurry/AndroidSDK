@@ -11,6 +11,7 @@ open class AWApplication: com.airwatch.app.AWApplication() {
     private val logTag: String = "AWApplication"
 
     override fun getMainActivityIntent(): Intent {
+        Log.i(logTag, "Calling getMainActivityIntent")
         return Intent(applicationContext, MainActivity::class.java)
     }
 

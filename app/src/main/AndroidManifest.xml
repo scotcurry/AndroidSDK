@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.curryware.androidsdk">
+    package="org.curryware.androidsdk"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Following declarations are added -->
     <uses-permission android:name="com.airwatch.sdk.BROADCAST" />
@@ -13,19 +14,30 @@
     </queries>
 
     <application
+        android:name=".AWApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AndroidSDK">
+        android:theme="@style/Theme.AndroidSDK"
+        tools:replace="android:label" >
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivity" >
+            <!--
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AndroidSDK.NoActionBar">
+            android:theme="@style/Theme.AndroidSDK.NoActionBar"
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity android:name="com.airwatch.login.ui.activity.SDKSplashActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -58,7 +70,10 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <service android:name=".AirWatchSDKIntentService"/>
+
+        <service android:name=".AirWatchSDKIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+        />
 
     </application>
 
