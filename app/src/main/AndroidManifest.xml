@@ -35,7 +35,7 @@
             -->
         </activity>
         <activity android:name="com.airwatch.login.ui.activity.SDKSplashActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -44,7 +44,8 @@
 
         <receiver
             android:name="com.airwatch.sdk.AirWatchSDKBroadcastReceiver"
-            android:permission="com.airwatch.sdk.BROADCAST" >
+            android:permission="com.airwatch.sdk.BROADCAST"
+            android:exported="false">
             <intent-filter>
                 <!--
                 Next line uses the initial dot notation as a shorthand for the package name.
