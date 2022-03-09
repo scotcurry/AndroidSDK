@@ -10,4 +10,8 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="fab_description">Placeholder</string>
+
+    <!-- App Config Strings -->
+    <string name="uem_username">UEM Username</string>
+    <string name="uem_username_description">Used to show passing UEM variables</string>
 </resources>

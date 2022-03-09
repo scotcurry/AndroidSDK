@@ -1,6 +1,9 @@
 package org.curryware.androidsdk
 
+import android.content.Context
 import android.os.Bundle
+import android.os.UserManager
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -9,12 +12,20 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
+import com.airwatch.sdk.AirWatchSDKException
+import com.airwatch.sdk.SDKManager
 import org.curryware.androidsdk.databinding.ActivityMainBinding
+import org.curryware.androidsdk.viewmodels.SDKViewModel
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    val UEM_USERNAME = "uem_username"
+    lateinit var sdkViewModel: SDKViewModel
+    private val logTag = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+        sdkViewModel = ViewModelProvider(this).get(SDKViewModel::class.java)
+        startSDK()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,4 +68,48 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    override fun onResume()  {
+        super.onResume()
+        var restrictionsBundle = Bundle()
+
+        val userManager : UserManager? = getSystemService(Context.USER_SERVICE) as UserManager
+        if (userManager != null ) {
+            restrictionsBundle = userManager.getApplicationRestrictions(packageName)
+        }
+
+        if (restrictionsBundle.containsKey(UEM_USERNAME)) {
+            val publicUEMUserName = restrictionsBundle.getString(UEM_USERNAME)
+            Log.i(logTag, "UEM UserName: $publicUEMUserName")
+        }
+    }
+
+    private fun startSDK() { thread {
+        try {
+            val initSDKManager = SDKManager.init(this)
+            Log.i(logTag, "!!! SDK Manager Initialized !!!")
+            if (initSDKManager != null) {
+
+                val enrolled = initSDKManager!!.isEnrolled
+                val enrolledUser = initSDKManager!!.enrollmentUsername
+                val passcodePolicy = initSDKManager!!.passcodePolicy
+                val customSettings = initSDKManager!!.customSettings
+                val restrictionPolicy = initSDKManager!!.restrictionPolicy
+                val apiVersion = initSDKManager!!.apiVersion
+
+                Log.i(logTag, "Is Enrolled: $enrolled")
+                Log.i(logTag, "Enrolled User: $enrolledUser")
+
+                sdkViewModel.liveDataCurrentName.postValue(enrolledUser)
+                sdkViewModel.passcodePolicy.postValue(passcodePolicy)
+                sdkViewModel.customSettings.postValue(customSettings)
+                sdkViewModel.restrictionPolicy.postValue(restrictionPolicy)
+                sdkViewModel.apiVersion.postValue(apiVersion)
+                sdkViewModel.isEnrolled.postValue(enrolled)
+            }
+        }
+        catch (exception: AirWatchSDKException) {
+            Log.e(logTag, "Exception ${exception.message}")
+        }
+    } }
 }

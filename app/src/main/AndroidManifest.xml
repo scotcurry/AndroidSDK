@@ -22,9 +22,9 @@
         android:theme="@style/Theme.AndroidSDK"
         tools:replace="android:label" >
         <activity
-            android:name=".MainActivity" >
+            android:name=".MainActivity"
+            android:exported="true" >
             <!--
-            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AndroidSDK.NoActionBar"
 
@@ -35,7 +35,7 @@
             -->
         </activity>
         <activity android:name="com.airwatch.login.ui.activity.SDKSplashActivity"
-            android:label="@string/app_name" android:exported="true">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,7 +45,7 @@
         <receiver
             android:name="com.airwatch.sdk.AirWatchSDKBroadcastReceiver"
             android:permission="com.airwatch.sdk.BROADCAST"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <!--
                 Next line uses the initial dot notation as a shorthand for the package name.
@@ -54,8 +54,7 @@
             </intent-filter>
             <intent-filter>
                 <action
-                    android:name="com.airwatch.intent.action.APPLICATION_CONFIGURATION_CHANGED"
-                    />
+                    android:name="com.airwatch.intent.action.APPLICATION_CONFIGURATION_CHANGED" />
                 <!--
                 In the host attribute, replace com.your.package with the package name of your
                 application.
@@ -75,6 +74,9 @@
         <service android:name=".AirWatchSDKIntentService"
             android:permission="android.permission.BIND_JOB_SERVICE"
         />
+
+        <meta-data android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/app_restrictions" />
 
     </application>
 

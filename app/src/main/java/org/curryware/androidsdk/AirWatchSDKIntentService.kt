@@ -12,7 +12,10 @@ class AirWatchSDKIntentService: AirWatchSDKBaseIntentService() {
 
     private val logTag: String = "AirWatchSDKIntentService"
 
-    override fun onApplicationConfigurationChange(applicationConfiguration: Bundle) { }
+    override fun onApplicationConfigurationChange(applicationConfiguration: Bundle) {
+
+        Log.i(logTag, "*** App Configuration Change Called! ***")
+    }
 
     // Curryware Comment:  Added the logging statements.  Trying to figure out what is in the
     // profile.
