@@ -71,12 +71,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume()  {
         super.onResume()
-        var restrictionsBundle = Bundle()
 
-        val userManager : UserManager? = getSystemService(Context.USER_SERVICE) as UserManager
-        if (userManager != null ) {
-            restrictionsBundle = userManager.getApplicationRestrictions(packageName)
-        }
+        val userManager : UserManager = getSystemService(Context.USER_SERVICE) as UserManager
+        val restrictionsBundle = userManager.getApplicationRestrictions(packageName)
+
 
         if (restrictionsBundle.containsKey(UEM_USERNAME)) {
             val publicUEMUserName = restrictionsBundle.getString(UEM_USERNAME)
@@ -84,25 +82,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // This is where all of the SDK calls are made.  The setup is done in the AirWatchSDKIntentService
+    // code.
     private fun startSDK() { thread {
         try {
             val initSDKManager = SDKManager.init(this)
             Log.i(logTag, "!!! SDK Manager Initialized !!!")
             if (initSDKManager != null) {
 
-                val enrolled = initSDKManager!!.isEnrolled
-                val enrolledUser = initSDKManager!!.enrollmentUsername
-                val passcodePolicy = initSDKManager!!.passcodePolicy
-                val customSettings = initSDKManager!!.customSettings
-                val restrictionPolicy = initSDKManager!!.restrictionPolicy
-                val apiVersion = initSDKManager!!.apiVersion
+                val enrolled = initSDKManager.isEnrolled
+                val enrolledUser = initSDKManager.enrollmentUsername
+                val passcodePolicy = initSDKManager.passcodePolicy
+                val customSettings = initSDKManager.customSettings
+                val restrictionPolicy = initSDKManager.restrictionPolicy
+                val apiVersion = initSDKManager.apiVersion
 
                 Log.i(logTag, "Is Enrolled: $enrolled")
                 Log.i(logTag, "Enrolled User: $enrolledUser")
 
                 sdkViewModel.liveDataCurrentName.postValue(enrolledUser)
                 sdkViewModel.passcodePolicy.postValue(passcodePolicy)
-                sdkViewModel.customSettings.postValue(customSettings)
+                sdkViewModel.customSettingsPolicy.postValue(customSettings)
                 sdkViewModel.restrictionPolicy.postValue(restrictionPolicy)
                 sdkViewModel.apiVersion.postValue(apiVersion)
                 sdkViewModel.isEnrolled.postValue(enrolled)
