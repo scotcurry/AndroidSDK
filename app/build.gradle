@@ -63,12 +63,8 @@ android {
 repositories {
     google()
     mavenCentral()
-    jcenter()
     maven {
         url = 'https://vmwaresaas.jfrog.io/artifactory/Workspace-ONE-Android-SDK/'
-    }
-    maven {
-        url = 'https://kotlin.bintray.com/kotlinx/'
     }
 }
 
@@ -77,7 +73,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Local library files
-    implementation 'com.airwatch.android:AWFramework:22.2'
+    implementation 'com.airwatch.android:AWFramework:22.4'
     // Libraries required by SDK hosted in maven
     implementation 'androidx.multidex:multidex:2.0.1'
 
