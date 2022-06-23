@@ -18,13 +18,14 @@ import com.airwatch.sdk.SDKManager
 import org.curryware.androidsdk.databinding.ActivityMainBinding
 import org.curryware.androidsdk.viewmodels.SDKViewModel
 import kotlin.concurrent.thread
+import com.crittercism.app.Crittercism
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     val UEM_USERNAME = "uem_username"
-    lateinit var sdkViewModel: SDKViewModel
+    private lateinit var sdkViewModel: SDKViewModel
     private val logTag = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +45,11 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
         sdkViewModel = ViewModelProvider(this).get(SDKViewModel::class.java)
+        startSDK()
+
+        Crittercism.initialize(applicationContext, "c6751b9d5ea5431ea0515f3a403add2200555300")
+        val dataDirectory = applicationContext.applicationInfo.dataDir
+        Crittercism.leaveBreadcrumb("Data Directory: $dataDirectory")
         startSDK()
     }
 
@@ -80,6 +86,11 @@ class MainActivity : AppCompatActivity() {
             val publicUEMUserName = restrictionsBundle.getString(UEM_USERNAME)
             Log.i(logTag, "UEM UserName: $publicUEMUserName")
         }
+    }
+
+
+    private fun logSDKStart() {
+        Log.i(logTag, "Calling SDK Function in Thread!")
     }
 
     // This is where all of the SDK calls are made.  The setup is done in the AirWatchSDKIntentService

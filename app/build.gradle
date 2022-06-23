@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     signingConfigs {
         releaseSigning {
@@ -30,9 +30,9 @@ android {
     defaultConfig {
         applicationId "org.curryware.androidsdk"
         minSdk 27
-        targetSdk 30
-        versionCode 1
-        versionName "1.0"
+        targetSdk 31
+        versionCode 2205
+        versionName "22.5.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,6 +64,9 @@ repositories {
     google()
     mavenCentral()
     maven {
+        url = 'https://vmwaresaas.jfrog.io/artifactory/Workspace-ONE-Intelligence-SDK-Android/'
+    }
+    maven {
         url = 'https://vmwaresaas.jfrog.io/artifactory/Workspace-ONE-Android-SDK/'
     }
 }
@@ -73,17 +76,23 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Local library files
-    implementation 'com.airwatch.android:AWFramework:22.4'
+    implementation ("com.airwatch.android:AWFramework:22.5") {
+        exclude group: 'androidx.work', module: 'work-runtime-ktx'
+        exclude group: 'com.vmware.xsw.crypto', module: 'xsw-crypto-android'
+    }
+    implementation ('androidx.work:work-runtime-ktx:2.7.1')
+    api ("com.vmware.xsw.crypto:xsw-crypto-android:22.5.1.220523124756")
     // Libraries required by SDK hosted in maven
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.crittercism:crittercism-android-agent:6.1.2'
 
     // Libraries that were included from Basic Activity template
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

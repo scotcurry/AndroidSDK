@@ -3,10 +3,13 @@ package org.curryware.androidsdk
 import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.airwatch.event.SDKClientConfig
+import com.airwatch.event.WS1AnchorEvents
+import com.airwatch.sdk.shareddevice.ClearReasonCode
 import java.security.cert.X509Certificate
 
 // Note the fully qualified base class name.
-open class AWApplication: com.airwatch.app.AWApplication() {
+open class AWApplication: com.airwatch.app.AWApplication(), SDKClientConfig {
 
     private val logTag: String = "AWApplication"
 
@@ -25,5 +28,9 @@ open class AWApplication: com.airwatch.app.AWApplication() {
 
     override fun getNightMode(): Int {
         return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    }
+
+    override fun getEventHandler(): WS1AnchorEvents {
+        return AirWatchSDKIntentService()
     }
 }

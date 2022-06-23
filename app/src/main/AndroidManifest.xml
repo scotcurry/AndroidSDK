@@ -5,6 +5,8 @@
 
     <!-- Following declarations are added -->
     <uses-permission android:name="com.airwatch.sdk.BROADCAST" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!-- Following tag applies to compileSdkVersion 30 or later. -->
     <queries>
